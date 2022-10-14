@@ -9,6 +9,8 @@ This is a project we create in accord with our Python-Backendcourse.
 * Log actions from users.
 * Reporting.
 
- 2. In Work:
+2. In Work:
  
- 3. Implemented:
+3. Implemented:
+
+4. License: https://github.com/Kraetzi/Project_DCI_PyBackendCourse/blob/main/LICENSE.txt
