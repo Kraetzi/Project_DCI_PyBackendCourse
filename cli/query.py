@@ -1,3 +1,4 @@
+import os
 """Command line interface to query the stock.
 
 To iterate the source data you can use the following structure:
@@ -20,6 +21,7 @@ print ("Welcome to the warehouse system,", user_name)
     # Show the menu and ask to pick a choice
 while True:
     menu = int(input ("1. List items by warehouse \n2. Search an item and place an order \n3. Quit\n"))
+    
     # If they pick 1
     if menu == 1:
         print (" \n Warehouse 1 \n")
@@ -30,7 +32,10 @@ while True:
             print (count+1 , i)
     # Else, if they pick 2
     elif menu == 2:
+        # clear the terminal with os
+        os.system("clear")
         item_name = input ("Please state the Item you are searching for: ")
+        item_name = item_name.capitalize()
         if item_name in warehouse1 and item_name in warehouse2:
             print (item_name, "Is in both warehouses")
             i_1 = 0
