@@ -1,4 +1,5 @@
 import os
+import datetime
 """Command line interface to query the stock.
 
 To iterate the source data you can use the following structure:
@@ -8,9 +9,7 @@ for item in warehouse1:
     # The `item` name will contain each of the strings (item names) in the list.
 """
 
-import numbers
-from stringprep import in_table_c11_c12
-from data import warehouse1, warehouse2
+from data import stock
 
 # YOUR CODE STARTS HERE
 
@@ -20,59 +19,69 @@ user_name = input("Please state your username: ")
 print ("Welcome to the warehouse system,", user_name)
     # Show the menu and ask to pick a choice
 while True:
-    menu = int(input ("1. List items by warehouse \n2. Search an item and place an order \n3. Quit\n"))
+    menu = int(input ("1. List items by warehouse \n2. Search an item and place an order\n3. Search by Category\n4. Quit"))
     
     # If they pick 1
     if menu == 1:
         print (" \n Warehouse 1 \n")
-        for count, i in enumerate(warehouse1):
-            print (count+1 , i)
+        total_items1 = []
+        for i in stock:
+            if i["warehouse"] == 1:
+                total_items1.append(i)
+                print (f"{total_items1.index(i) + 1}. {i['state']} {i['category']}")                
         print (" \n warehouse 2 \n")
-        for count, i in enumerate(warehouse2):
-            print (count+1 , i)
+        total_items2 = []
+        for i in stock:
+            if i["warehouse"] == 2:
+                total_items2.append(i)
+                print (f"{total_items2.index(i) + 1}. {i['state']} {i['category']}")
+        print (f"Total items in warehouse 1: {len(total_items1)}\nTotal items in warehouse 2: {len(total_items2)}")
+         
+
+            
     # Else, if they pick 2
     elif menu == 2:
         # clear the terminal with os
         os.system("clear")
         item_name = input ("Please state the Item you are searching for: ")
-        item_name = item_name.capitalize()
-        if item_name in warehouse1 and item_name in warehouse2:
+        warehouse1 = []
+        warehouse2 = []
+        for i in range(len(stock)):
+            if stock[i]["state"].upper() in item_name.upper() and stock[i]["category"].upper() in item_name.upper() and stock[i]["warehouse"] ==1:
+                warehouse1.append(stock[i])
+            elif stock[i]["state"].upper() in item_name.upper() and stock[i]["category"].upper() in item_name.upper() and stock[i]["warehouse"] ==2:
+                warehouse2.append(stock[i])
+        if len(warehouse1) > 0 and len(warehouse2) > 0:
             print (item_name, "Is in both warehouses")
-            i_1 = 0
-            i_2 = 0
-            for i in warehouse1:
-                if i == item_name:
-                    i_1 += 1
-            for i in warehouse2:
-                if i == item_name:
-                    i_2 += 1
-            if i_1 < i_2:
+            print(f"{len(warehouse1)} items in warehouse 1 and {len(warehouse2)} items in warehouse 2.")
+                    
+            if len(warehouse1) < len(warehouse2):
                 print ("Warehouse 2 has more in Stock")
-            elif i_1 > i_2:
+            elif len(warehouse1) > len(warehouse2):
                 print ("Warehouse 1 has more in Stock")
             else:
                 print ("Equal distribution")
-            number = i_1 + i_2
+            number = len(warehouse1) + len(warehouse2)
             print ("There are ", number, "Pieces in Stock")
-            print (i_1, "in Warehouse 1")
-            print (i_2, "in Warehouse 2")
-        elif item_name in warehouse1:
-            number = 0
-            for i in warehouse1:
-                if i == item_name:
-                    number += 1
-            print ("There are ", number, "Pieces in Stock")
+            print (len(warehouse1), "in Warehouse 1")
+            print (len(warehouse2), "in Warehouse 2")
+        elif len(warehouse1) > 0 and len(warehouse2) == 0:
+            print ("There are ", len(warehouse1), "Pieces in Stock")
             print (item_name, "is in Warehouse 1")
-        elif item_name in warehouse2:
-            number = 0
-            for i in warehouse2:
-                if i == item_name:
-                    number += 1
-            print ("There are ", number, "Pieces in Stock")
+        elif len(warehouse2) > 0 and len(warehouse1) == 0:
+            print ("There are ", len(warehouse2), "Pieces in Stock")
             print (item_name, "is in Warehouse 2")
         else:
             print ("Not in Stock")
-            number = 0
+        print("Location:")
+        for i in warehouse1:
+            delta = datetime.datetime.now() - datetime.datetime.strptime(i["date_of_stock"],"%Y-%m-%d %H:%M:%S")
+            print(f"- Warehouse 1 (in stock for {delta.days} days)")
+        for i in warehouse2:
+            delta = datetime.datetime.now() - datetime.datetime.strptime(i["date_of_stock"],"%Y-%m-%d %H:%M:%S")
+            print(f"- Warehouse 2 (in stock for {delta.days} days)")
+        
+            
         
         order = input ("Do you want to place an order? (Y/N)")
         if order == "Y":
@@ -84,12 +93,48 @@ while True:
                 if max_order == "Y":
                     print("The maximum amount of", item_name, "has been ordered!")
                 
-        
-
-    # Else, if they pick 3
+    #Else, if they pick 3, we search for categories
     elif menu == 3:
-        break
+        categories = {1:"Keyboard",2:"Smartphone",3:"Mouse",4:"Laptop",5:"Headphones",6:"Monitor",7:"Router",8:"Tablet"}
+        temp = []
+        for i in stock:
+            if i['category'] ==  "Keyboard":
+                temp.append(1)
+            elif i['category'] == "Mouse":
+                temp.append(2)
+            elif i['category'] ==  "Smartphone":
+                temp.append(3)
+            elif i['category'] == "Laptop":
+                temp.append(4)
+            elif i['category'] ==  "Headphones":
+                temp.append(5)
+            elif i['category'] == "Monitor":
+                temp.append(6)
+            elif i['category'] ==  "Router":
+                temp.append(7)
+            elif i['category'] == "Tablet":
+                temp.append(8)
+        counter = 1
+        for i in categories:
+            print(f"{i}. {categories[i]} ({temp.count(counter)})")
+            counter += 1
+        menu_category = input("Type the number of the category to browse or press q to quit: ")
+        if menu_category in str(range(1,9)):
+            for i in stock:
+                if categories[int(menu_category)] == i["category"]:
+                    print(i["state"], i["category"],", Warehouse", i["warehouse"])
+        elif menu_category == "q":
+            break
 
+           
+            
+            
+
+    # Else, if they pick 4
+    elif menu == 4:
+        break
+    
+    
     # Else
     else: print("Invalid input, try 1, 2, or 3")
     # Thank the user for the visit
