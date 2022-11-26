@@ -98,28 +98,17 @@ while True:
         categories = {1:"Keyboard",2:"Smartphone",3:"Mouse",4:"Laptop",5:"Headphones",6:"Monitor",7:"Router",8:"Tablet"}
         temp = []
         for i in stock:
-            if i['category'] ==  "Keyboard":
-                temp.append(1)
-            elif i['category'] == "Mouse":
-                temp.append(2)
-            elif i['category'] ==  "Smartphone":
-                temp.append(3)
-            elif i['category'] == "Laptop":
-                temp.append(4)
-            elif i['category'] ==  "Headphones":
-                temp.append(5)
-            elif i['category'] == "Monitor":
-                temp.append(6)
-            elif i['category'] ==  "Router":
-                temp.append(7)
-            elif i['category'] == "Tablet":
-                temp.append(8)
+            counter1 = 0
+            for b in categories:
+                counter1 += 1
+                if i["category"] in categories[counter1]:
+                    temp.append(counter1)           
         counter = 1
         for i in categories:
             print(f"{i}. {categories[i]} ({temp.count(counter)})")
             counter += 1
         menu_category = input("Type the number of the category to browse or press q to quit: ")
-        if menu_category in str(range(1,9)):
+        if menu_category in str(12345678):
             for i in stock:
                 if categories[int(menu_category)] == i["category"]:
                     print(i["state"], i["category"],", Warehouse", i["warehouse"])
