@@ -57,7 +57,7 @@ def search_item():
             warehouse2.append(stock[i])
     if len(warehouse1) > 0 and len(warehouse2) > 0:
         print (item_name, "Is in both warehouses")
-        print(f"{len(warehouse1)} items in warehouse 1 and {len(warehouse2)} items in warehouse 2.")
+        #print(f"{len(warehouse1)} items in warehouse 1 and {len(warehouse2)} items in warehouse 2.")
                 
         if len(warehouse1) < len(warehouse2):
             print ("Warehouse 2 has more in Stock")
